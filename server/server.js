@@ -2,10 +2,13 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
 
 import connectDB from "./config/db.js";
 import weatherRoutes from "./src/routes/weatherRoutes.js";
 import favoriteRoutes from "./src/routes/favoriteRoutes.js";
+import historyRoutes from "./src/routes/historyRoutes.js";
+import authRoutes from "./src/routes/authRoutes.js";
 
 dotenv.config();
 
@@ -14,10 +17,12 @@ const app = express();
 app.use(
   cors({
     origin: process.env.CLIENT_URL || "http://localhost:5173",
+    credentials: true,
   })
 );
 
 app.use(express.json({ limit: "10kb" }));
+app.use(cookieParser());
 
 // Backend health check
 app.get("/", (req, res) => {
@@ -28,8 +33,10 @@ app.get("/", (req, res) => {
 });
 
 // API routes
+app.use("/api/auth", authRoutes);
 app.use("/api/weather", weatherRoutes);
 app.use("/api/favorites", favoriteRoutes);
+app.use("/api/history", historyRoutes);
 
 // Handle unknown routes
 app.use((req, res) => {

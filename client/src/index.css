@@ -1,53 +1,203 @@
-
 @import "tailwindcss";
+
+/* ========================================
+   SKYSENSE — GLOBAL DESIGN SYSTEM
+======================================== */
+
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  color-scheme: light;
+
+  --sky-bg: #EAF7FC;
+  --sky-surface: #FFFFFF;
+  --sky-surface-soft: #F1FAFD;
+  --sky-text: #243746;
+  --sky-muted: #647D8A;
+  --sky-border: #D6EAF1;
+  --sky-accent: #258EAE;
+  --sky-accent-soft: #E5F5FA;
+  --sky-shadow: 0 12px 35px rgba(63, 139, 164, 0.08);
+
+  --sky-sunrise: #FFE0B2;
+}
+
+/* DARK MODE */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --sky-bg: #030B1C;
+  --sky-surface: #1B2B34;
+  --sky-surface-soft: #15242D;
+  --sky-text: #F1F5F9;
+  --sky-muted: #A2B4BC;
+  --sky-border: rgba(166, 193, 210, 0.13);
+  --sky-accent: #38A6C5;
+  --sky-accent-soft: rgba(56, 166, 197, 0.12);
+  --sky-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+
+  --sky-sunrise: #E9B98A;
+}
+
+/* ========================================
+   BASE
+======================================== */
 
 @layer base {
   html {
+    min-width: 320px;
+    min-height: 100%;
     scroll-behavior: smooth;
+    scrollbar-gutter: stable;
   }
 
   body {
     min-width: 320px;
     min-height: 100vh;
-    font-family: Inter, ui-sans-serif, system-ui, -apple-system,
-      BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background: #081321;
-    color: #ffffff;
+    margin: 0;
+    color: var(--sky-text);
+    background: var(--sky-bg);
+    font-family: inherit;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    transition:
+      background-color 350ms ease,
+      color 350ms ease;
   }
 
   button,
-  input {
+  input,
+  textarea,
+  select {
     font: inherit;
   }
 
   button {
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
   }
 
   button:disabled {
     cursor: not-allowed;
   }
 
+  input,
+  textarea,
+  select {
+    color: var(--sky-text);
+  }
+
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible,
+  button:focus-visible {
+    outline: 2px solid var(--sky-accent);
+    outline-offset: 3px;
+  }
+
   ::selection {
-    background: rgba(34, 211, 238, 0.3);
-    color: white;
+    background: rgba(56, 166, 197, 0.25);
+    color: var(--sky-text);
   }
 }
 
+/* ========================================
+   REUSABLE UTILITIES
+======================================== */
+
+@layer utilities {
+  .glass-panel {
+    background: var(--sky-surface);
+    border: 1px solid var(--sky-border);
+    box-shadow: var(--sky-shadow);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .smooth-transition {
+    transition: all 300ms ease;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* ========================================
+   SCROLLBAR
+======================================== */
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--sky-muted) transparent;
+}
+
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #081321;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: var(--sky-muted);
+  opacity: 0.4;
   border-radius: 20px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #22d3ee;
+  background: var(--sky-accent);
+}
+
+/* ========================================
+   ANIMATIONS
+======================================== */
+
+@keyframes sky-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes sky-float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.sky-rise {
+  animation: sky-fade-up 650ms ease both;
+}
+
+.sky-float {
+  animation: sky-float 5s ease-in-out infinite;
+}
+
+/* ========================================
+   ACCESSIBILITY
+======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
